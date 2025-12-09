@@ -1,0 +1,43 @@
+# -------------------------------------
+# TASK 3 : CUSTOMER SEGMENTATION
+# -------------------------------------
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Sample dataset
+df = pd.DataFrame({
+    'tenure':[5,20,40,3,55,12,7],
+    'MonthlyCharges':[70,50,95,40,110,65,88],
+    'Contract':['Month-to-month','Two year','One year','Month-to-month','Two year','One year','Month-to-month'],
+    'Churn':['Yes','No','No','Yes','No','No','Yes']
+})
+
+# Segmenting based on tenure
+df['TenureSegment'] = pd.cut(df['tenure'],
+                             bins=[0,12,36,72],
+                             labels=['Short','Medium','Long'])
+
+# Segmenting based on monthly charges
+df['ChargeSegment'] = pd.cut(df['MonthlyCharges'],
+                             bins=[0,60,90,200],
+                             labels=['Low','Medium','High'])
+
+print(df)
+
+# Churn rate within segments
+segment_churn = df.groupby(['TenureSegment','ChargeSegment'])['Churn'].value_counts(normalize=True).unstack()
+print("\nSegment-wise Churn Rates:")
+print(segment_churn)
+
+# Visualization
+plt.figure(figsize=(7,4))
+sns.countplot(data=df, x='TenureSegment', hue='Churn')
+plt.title("Churn Across Tenure Segments")
+plt.show()
+
+# High-value churn risk (High charges + short tenure)
+high_risk = df[(df['ChargeSegment']=='High') & (df['TenureSegment']=='Short')]
+print("\nHigh Value Customers At Churn Risk:")
+print(high_risk)
