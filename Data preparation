@@ -1,0 +1,42 @@
+# -------------------------------------
+# TASK 1 : DATA PREPARATION
+# -------------------------------------
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Sample dataset (because no real dataset given)
+data = {
+    'gender': ['Male','Female','Female','Male','Male'],
+    'SeniorCitizen': [0,1,0,0,1],
+    'Partner': ['Yes','No','Yes','No','Yes'],
+    'Dependents': ['No','No','Yes','No','Yes'],
+    'tenure': [5,20,45,2,8],
+    'MonthlyCharges': [70,90,65,40,55],
+    'Churn': ['Yes','No','No','Yes','Yes']
+}
+
+df = pd.DataFrame(data)
+
+# Check info
+print("Dataset Info:")
+print(df.info())
+
+# Missing values
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+# Convert categorical → numerical
+df_encoded = pd.get_dummies(df, drop_first=True)
+
+print("\nEncoded Data:")
+print(df_encoded.head())
+
+# Split data
+X = df_encoded.drop('Churn_Yes', axis=1)
+y = df_encoded['Churn_Yes']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+print("\nTrain/Test Shapes:")
+print(X_train.shape, X_test.shape)
