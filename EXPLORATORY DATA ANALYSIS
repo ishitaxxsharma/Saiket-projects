@@ -1,0 +1,57 @@
+# -------------------------------------
+# TASK 2 : EXPLORATORY DATA ANALYSIS
+# -------------------------------------
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Sample dataset
+df = pd.DataFrame({
+    'gender':['Male','Female','Male','Female','Female','Male'],
+    'Partner':['Yes','No','Yes','Yes','No','No'],
+    'Dependents':['No','No','Yes','No','Yes','No'],
+    'tenure':[2,34,12,48,5,20],
+    'Contract':['Month-to-month','Two year','One year','Month-to-month','One year','Two year'],
+    'PaymentMethod':['Electronic check','Bank transfer','Mailed check','Credit card','Electronic check','Bank transfer'],
+    'MonthlyCharges':[70,50,90,40,55,85],
+    'Churn':['Yes','No','No','Yes','Yes','No']
+})
+
+# 1. Churn rate
+churn_rate = df['Churn'].value_counts(normalize=True)['Yes']
+print("Overall Churn Rate:", churn_rate)
+
+# 2. Gender distribution
+df['gender'].value_counts().plot(kind='bar')
+plt.title("Customer Distribution by Gender")
+plt.show()
+
+# 3. Partner Status
+df['Partner'].value_counts().plot(kind='bar')
+plt.title("Partner Status Distribution")
+plt.show()
+
+# 4. Dependents
+df['Dependents'].value_counts().plot(kind='bar')
+plt.title("Dependent Status Distribution")
+plt.show()
+
+# 5. Tenure vs Churn
+plt.figure(figsize=(6,4))
+sns.boxplot(x=df['Churn'], y=df['tenure'])
+plt.title("Tenure vs Churn")
+plt.show()
+
+# 6. Contract Type vs Churn
+plt.figure(figsize=(7,4))
+sns.countplot(data=df, x='Contract', hue='Churn')
+plt.title("Churn by Contract Type")
+plt.show()
+
+# 7. Payment Method vs Churn
+plt.figure(figsize=(7,4))
+sns.countplot(data=df, x='PaymentMethod', hue='Churn')
+plt.xticks(rotation=20)
+plt.title("Churn by Payment Method")
+plt.show()
